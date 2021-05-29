@@ -79,10 +79,10 @@ class StaggeredSequence(PartitionedSequence):
     def __init__(self, step_count, executor):
         PartitionedSequence.__init__(self, step_count, executor)
 
-    def branch_execute(self, n, start_frame_index, **kwargs):
-        self.partition(n, start_frame_index)
-        self.partition_execute(n//2, start_frame_index)
-        self.partition_execute(n//2, start_frame_index+n//2)
+    def branch_execute(self, m, start_frame_index, **kwargs):
+        self.partition(m, start_frame_index)
+        self.partition_execute(m//2, start_frame_index)
+        self.partition_execute(m//2, start_frame_index+m//2)
 
 
 class RefinedSequence(PartitionedSequence):
@@ -90,13 +90,13 @@ class RefinedSequence(PartitionedSequence):
     def __init__(self, step_count, executor):
         PartitionedSequence.__init__(self, step_count, executor)
 
-    def branch_execute(self, n, start_frame_index, update_target=False, **kwargs):
-        self.partition(n, start_frame_index)
-        self.partition_execute(n // 2, start_frame_index, update_target=True)
+    def branch_execute(self, m, start_frame_index, update_target=False, **kwargs):
+        self.partition(m, start_frame_index)
+        self.partition_execute(m // 2, start_frame_index, update_target=True)
         if update_target:
-            self.partition(n, start_frame_index + n)
-            self.partition(n, start_frame_index + n // 2)
-        self.partition_execute(n // 2, start_frame_index + n // 2, update_target=update_target)
+            self.partition(m, start_frame_index + m)
+            self.partition(m, start_frame_index + m // 2)
+        self.partition_execute(m // 2, start_frame_index + m // 2, update_target=update_target)
 
 
 class SkipSequence(PartitionedSequence):

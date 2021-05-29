@@ -56,7 +56,6 @@ class PDEExecutor(PartitioningExecutor):
     def partition(self, n, initial_frame, target_frame, center_frame):
         PartitioningExecutor.partition(self, n, initial_frame, target_frame, center_frame)
         center_frame.worldstate = self.pde.predict(n, initial_frame.worldstate, target_frame.worldstate, trainable='OP%d' % n in self.trainable_networks)
-
         if center_frame.index == self.worldsteps + 1:
             assert center_frame.worldstate is not None
             old_state = self.next_state_prediction

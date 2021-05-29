@@ -53,10 +53,12 @@ class ControlTraining(LearningApp):
         self.add_all_fields('GT', world.state, 0)
         target_state = pde.placeholder_state(world, n*dt)
         self.add_all_fields('GT', target_state, n)
+        
         in_states = [world.state] + [None] * (n-1) + [target_state]
         for frame in obs_loss_frames:
             if in_states[frame] is None:
                 in_states[frame] = pde.placeholder_state(world, frame*self.dt)
+
         # --- Execute sequence ---
         executor = self.executor = PDEExecutor(world, pde, target_state, trainable_networks, self.dt)
         sequence = self.sequence = sequence_class(n, executor)
@@ -87,6 +89,7 @@ class ControlTraining(LearningApp):
         # --- Training data ---
         self.info('Preparing data')
         placeholders, channels = collect_placeholders_channels(in_states, trace_to_channel=trace_to_channel)
+        #breakpoint()
         data_load_dict = {p: c for p, c in zip(placeholders, channels)}
         self.set_data(data_load_dict,
                       val=None if val_range is None else Dataset.load(datapath, val_range),
